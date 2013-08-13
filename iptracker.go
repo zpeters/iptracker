@@ -6,19 +6,24 @@ import (
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
+	"flag"
 	"os"
 )
 
-var Debug = true
+var DEBUG = false
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Printf("%s IPADDRESS\n", os.Args[0])
+
+	var ipAddress = flag.String("i", "NULL", "Specify ip address")
+	flag.BoolVar(&DEBUG, "d", false, "Debugging")
+	flag.Parse()
+
+	if *ipAddress == "NULL" {
+		flag.Usage()
 		os.Exit(1)
 	}
 
-	ipAddress := os.Args[1]
-	url := fmt.Sprintf("http://www.geoplugin.net/json.gp?ip=%s", ipAddress)
+	url := fmt.Sprintf("http://www.geoplugin.net/json.gp?ip=%s", *ipAddress)
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatalf("Couldn't make http connection\n")
@@ -49,12 +54,12 @@ func main() {
 	}
 
 	if cc != "US" {	
-		fmt.Printf("IP: %s not in the US\n", ipAddress)
+		fmt.Printf("IP: %s not in the US\n", *ipAddress)
 		fmt.Printf("Results...\n")
 		fmt.Printf(string(body))
 	} else {
-		if Debug == true {
-			fmt.Printf("IP: %s is in the US\n", ipAddress)
+		if DEBUG == true {
+			fmt.Printf("IP: %s is in the US\n", *ipAddress)
 			fmt.Printf("Results...\n")
 			fmt.Printf(string(body))
 		}
