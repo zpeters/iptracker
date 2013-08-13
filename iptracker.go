@@ -9,9 +9,14 @@ import (
 	"os"
 )
 
+var Debug = true
 
 func main() {
-	//ipAddress := "8.8.8.8"
+	if len(os.Args) != 2 {
+		fmt.Printf("%s IPADDRESS\n", os.Args[0])
+		os.Exit(1)
+	}
+
 	ipAddress := os.Args[1]
 	url := fmt.Sprintf("http://www.geoplugin.net/json.gp?ip=%s", ipAddress)
 	resp, err := http.Get(url)
@@ -47,5 +52,11 @@ func main() {
 		fmt.Printf("IP: %s not in the US\n", ipAddress)
 		fmt.Printf("Results...\n")
 		fmt.Printf(string(body))
+	} else {
+		if Debug == true {
+			fmt.Printf("IP: %s is in the US\n", ipAddress)
+			fmt.Printf("Results...\n")
+			fmt.Printf(string(body))
+		}
 	}
 }
