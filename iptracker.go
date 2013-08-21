@@ -11,13 +11,20 @@ import (
 )
 
 var DEBUG = false
+var VERSION = "0.01"
 
 func main() {
 
 	var ipAddress = flag.String("i", "NULL", "Specify ip address")
 	var usFlag = flag.Bool("us", false, "Set this flag to alert if IP address is not in the US. Can be used in monitoring scenarios")
+	var version = flag.Bool("v", false, "Display version")
 	flag.BoolVar(&DEBUG, "d", false, "Debugging")
 	flag.Parse()
+
+	if *version {
+		fmt.Printf("%s - Version: %s\n", os.Args[0], VERSION)
+		os.Exit(0)
+	}
 
 	if *ipAddress == "NULL" {
 		flag.Usage()
