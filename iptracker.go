@@ -15,6 +15,7 @@ var DEBUG = false
 func main() {
 
 	var ipAddress = flag.String("i", "NULL", "Specify ip address")
+	var usFlag = flag.Bool("us", false, "Set this flag to alert if IP address is not in the US. Can be used in monitoring scenarios")
 	flag.BoolVar(&DEBUG, "d", false, "Debugging")
 	flag.Parse()
 
@@ -53,15 +54,14 @@ func main() {
 		log.Fatalf("Error: %s\n", err)
 	}
 
-	if cc != "US" {	
-		fmt.Printf("IP: %s not in the US\n", *ipAddress)
-		fmt.Printf("Results...\n")
-		fmt.Printf(string(body))
-	} else {
-		if DEBUG == true {
-			fmt.Printf("IP: %s is in the US\n", *ipAddress)
-			fmt.Printf("Results...\n")
+	if *usFlag {
+		if cc != "US" {
+			fmt.Printf("IP: %s not in the US\n", *ipAddress)			
 			fmt.Printf(string(body))
+		} else {
+			// since we are only alerting if the IP is *not* in the US we will do nothing
 		}
+	} else {
+		fmt.Printf(string(body))
 	}
 }
