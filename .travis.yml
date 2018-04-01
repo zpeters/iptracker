@@ -1,0 +1,10 @@
+language: go
+sudo: true
+go:
+  - 1.9
+notifications:
+  email:
+    recipients:
+      - zpeters@gmail.com
+    on_failure: always
+on_success: always
